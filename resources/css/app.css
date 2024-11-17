@@ -1,3 +1,42 @@
 @tailwind base;
+
+/* resets some tailwind styles set in the base, that affect other components */
+
+[type='text'],
+[type='email'],
+[type='url'],
+[type='password'],
+[type='number'],
+[type='date'],
+[type='datetime-local'],
+[type='month'],
+[type='search'],
+[type='tel'],
+[type='time'],
+[type='week'],
+[multiple],
+textarea,
+select {
+    -webkit-appearance: initial;
+    -moz-appearance: initial;
+    appearance: initial;
+    background-color: initial;
+    border-color: initial;
+    border-width: initial;
+    border-radius: initial;
+    padding-top: initial;
+    /* padding-right: initial; */
+    padding-bottom: initial;
+    /* padding-left: initial; */
+    font-size: initial;
+    line-height: initial;
+    --tw-shadow: initial;
+    /* padding: 0.6rem; */
+}
+
 @tailwind components;
 @tailwind utilities;
+
+[x-cloak] {
+    display: none;
+}
