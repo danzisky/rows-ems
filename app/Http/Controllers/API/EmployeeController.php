@@ -23,6 +23,11 @@ class EmployeeController extends Controller
             $employees->where('name', 'like', '%' . $request->search . '%');
         }
 
+        // filter by salary range
+        if ($request->filled('min_salary') && $request->filled('max_salary')) {
+            $employees->whereBetween('salary', [$request->min_salary, $request->max_salary]);
+        }
+
         if ($request->filled('sort_by')) {
             $employees->orderBy($request->sort_by, $request->get('order', 'asc'));
         }

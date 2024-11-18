@@ -15,14 +15,49 @@
         flat
       >
         <template v-slot:text>
-          <v-text-field
-            v-model="search"
-            label="Search"
-            prepend-inner-icon="mdi-magnify"
-            variant="outlined"
-            hide-details
-            single-line
-          ></v-text-field>
+          <v-row>
+              <v-col cols="12" md="6">
+                <v-text-field
+                  v-model="search"
+                  label="Search"
+                  prepend-inner-icon="mdi-magnify"
+                  variant="outlined"
+                  hide-details
+                  single-line
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-range-slider
+                  v-model="salaryRange"
+                  label="Salary Range"
+                  min="0"
+                  max="100000"
+                  step="1000"
+                  hide-details
+                >
+                  <template #prepend>
+                    <v-text-field
+                      v-model="salaryRange[0]"
+                      style="width: 100px"
+                      type="number"
+                      variant="outlined"
+                      hide-details
+                      single-line
+                      ></v-text-field>
+                  </template>
+                  <template #append>
+                    <v-text-field
+                      v-model="salaryRange[1]"
+                      style="width: 100px"
+                      type="number"
+                      variant="outlined"
+                      hide-details
+                      single-line
+                    ></v-text-field>
+                  </template>
+              </v-range-slider>
+              </v-col>
+          </v-row>
         </template>
 
         <v-data-table
@@ -86,6 +121,7 @@ const headers = [
 ]
 
 const search = ref('')
+const salaryRange = ref([0, 100000])
 const loading = ref(false)
 
 const pagination = ref({
@@ -100,7 +136,14 @@ onMounted(() => {
 const fetchEmployees = useDebounceFn((page = 1) => {
   loading.value = true
 
-  axios.get('/api/employees', { params: { page, search: search.value } })
+  axios.get('/api/employees', {
+      params: {
+        page,
+        search: search.value,
+        min_salary: salaryRange.value[0],
+        max_salary: salaryRange.value[1],
+      }
+    })
     .then(response => {
       employees.value = response.data.data
       pagination.value = {
@@ -135,7 +178,7 @@ const formatDate = (date) => {
   return new Date(date).toLocaleString()
 }
 
-watch(search, () => {
+watch([search, salaryRange], () => {
   fetchEmployees()
 })
 </script>
