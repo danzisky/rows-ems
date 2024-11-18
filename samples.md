@@ -1,5 +1,16 @@
 # API Requests and Responses
 
+## API Endpoints:
+
+```bash
+GET|HEAD        api/certifications ......... API\CertificationController@index  
+GET|HEAD        api/employees ................... API\EmployeeController@index  
+POST            api/employees ................... API\EmployeeController@store  
+GET|HEAD        api/employees/{employee} ......... API\EmployeeController@show  
+PUT             api/employees/{employee} ....... API\EmployeeController@update  
+DELETE          api/employees/{employee} ...... API\EmployeeController@destroy
+```
+
 ## 1. Get Employees (GET Request)
 ### Request:
 ```http
