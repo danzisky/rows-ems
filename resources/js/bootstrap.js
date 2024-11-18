@@ -20,6 +20,24 @@ window.axios.defaults.headers.common['Accept'] = 'application/json';
   return Promise.reject(error);
 }); */
 
+// use an interceptior to log requests and responses
+/* window.axios.interceptors.response.use(response => {
+  let request = response.config
+  console.log('Request:', JSON.stringify({
+    url: request.url,
+    method: request.method,
+    headers: request.headers,
+    data: request.data
+  }))
+  console.log('Response:', JSON.stringify({
+    status: response.status,
+    statusText: response.statusText,
+    headers: response.headers,
+    data: response.data
+  }))
+  return response
+}) */
+
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
