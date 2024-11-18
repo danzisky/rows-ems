@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
@@ -13,6 +13,10 @@ import { usePreferredColorScheme, usePreferredDark } from '@vueuse/core';
 const showingNavigationDropdown = ref(false);
 
 const theme = usePreferredColorScheme();
+
+onBeforeMount(async () => {
+    await window.axios.get('/sanctum/csrf-cookie');
+})
 </script>
 
 <template>

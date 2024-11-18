@@ -17,14 +17,18 @@ defineProps({
 });
 
 const form = useForm({
-    email: '',
-    password: '',
+    email: 'test@example.com',
+    password: 'password',
     remember: false,
 });
 
 const submit = () => {
     form.post(route('login'), {
-        onFinish: () => form.reset('password'),
+        onFinish: () => {
+            form.reset('password')
+            // refresh page to reinstate the CSRF token
+            window.location.reload()
+        },
     });
 };
 </script>

@@ -46,6 +46,7 @@ import { useDebounceFn } from '@vueuse/core';
 import CertificationsLayout from './Layout.vue';
 import Pagination from '@App/Components/Pagination.vue';
 import { ref, watch, onBeforeMount } from 'vue';
+import CreateAlert from '../Hooks/CreateAlert';
 
 const certifications = ref([])
 
@@ -73,6 +74,7 @@ const fetchCertifications = useDebounceFn(async (page = 1) => {
       current_page: response.data.current_page,
     }
   } catch (error) {
+    CreateAlert.error('An error occurred while fetching certifications.')
     console.error(error)
   } finally {
     loading.value = false

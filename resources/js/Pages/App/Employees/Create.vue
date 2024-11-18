@@ -75,6 +75,7 @@
 import EmployeesLayout from './Layout.vue';
 import { onMounted, ref } from 'vue';
 import { router } from '@inertiajs/vue3';
+import CreateAlert from '../Hooks/CreateAlert';
 
 const form = ref({
   name: '',
@@ -90,10 +91,12 @@ const certifications = ref([]);
 const createEmployee = () => {
   axios.post('/api/employees', form.value)
     .then(response => {
+      CreateAlert.success('Employee created successfully.')
       router.get(route('employees.index'))
     })
     .catch(error => {
-      console.error(error)
+      // console.error(error)
+      CreateAlert.error(error.response.data.message || 'An error occurred while creating the employee.')
     })
 }
 
@@ -108,6 +111,7 @@ const fetchCertifications = () => {
       })
     })
     .catch(error => {
+      CreateAlert.error('An error occurred while fetching certifications.')
       console.error(error)
     })
 }

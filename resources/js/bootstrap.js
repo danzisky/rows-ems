@@ -9,8 +9,16 @@ window.axios = axios;
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.axios.defaults.withCredentials = true;
-window.axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content') || window.Laravel.csrfToken;
+window.axios.defaults.headers.common['X-CSRF-TOKEN'] = window.Laravel.csrfToken || document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 window.axios.defaults.headers.common['Accept'] = 'application/json';
+
+// if a 419 status code is returned, it means the CSRF token has expired. Refresh the page to get a new token.
+/* window.axios.interceptors.response.use(response => response, error => {
+  if (error.response.status === 419) {
+      window.location.reload();
+  }
+  return Promise.reject(error);
+}); */
 
 
 /**

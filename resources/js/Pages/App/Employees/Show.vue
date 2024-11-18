@@ -79,6 +79,7 @@
 </template>
 
 <script setup>
+import CreateAlert from '../Hooks/CreateAlert';
 import EmployeesLayout from './Layout.vue';
 import { onMounted, ref } from 'vue';
 
@@ -104,8 +105,9 @@ const updateEmployee = async () => {
 
   try {
     await axios.put(`/api/employees/${proxyEmployee.value.id}`, { ...employeeState, certifications: employeeCertifications })
+    CreateAlert.success('Employee updated successfully.')
   } catch (error) {
-    console.error(error)
+    CreateAlert.error(error.message || 'An error occurred while updating the employee.')
   }
 }
 

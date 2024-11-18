@@ -70,6 +70,7 @@ import EmployeesLayout from './Layout.vue';
 import Pagination from '@App/Components/Pagination.vue';
 import { ref, onMounted, watch } from 'vue';
 import { router, Link } from '@inertiajs/vue3';
+import CreateAlert from '../Hooks/CreateAlert';
 
 const employees = ref([])
 
@@ -98,7 +99,7 @@ onMounted(() => {
 
 const fetchEmployees = useDebounceFn((page = 1) => {
   loading.value = true
-  
+
   axios.get('/api/employees', { params: { page, search: search.value } })
     .then(response => {
       employees.value = response.data.data
@@ -109,6 +110,7 @@ const fetchEmployees = useDebounceFn((page = 1) => {
     })
     .catch(error => {
       console.error(error)
+      CreateAlert.error('An error occurred while fetching employees.')
     })
     .finally(() => {
       loading.value = false
@@ -119,10 +121,12 @@ const deleteEmployee = (employee) => {
   if (confirm('Are you sure you want to delete this employee?')) {
     axios.delete(`/api/employees/${employee.id}`)
       .then(() => {
+        CreateAlert.success('Employee deleted successfully.')
         employees.value = employees.value.filter(e => e.id !== employee.id)
       })
       .catch(error => {
         console.error(error)
+        CreateAlert.error('An error occurred while deleting the employee.')
       })
   }
 }
