@@ -46,4 +46,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/certifications', [CertificationController::class, 'index'])->name('certifications.index');
 });
 
+/* Route::get('/test', function () {
+    $employees =  Employee::select('name')->limit(10)->get();
+    foreach ($employees->pluck('name') as $employeeName) {
+        echo $employeeName;
+    }
+}); */
+
 require __DIR__.'/auth.php';
