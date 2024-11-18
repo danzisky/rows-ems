@@ -36,6 +36,32 @@
                   hide-details
                 >
                   <template #prepend>
+                    <div class="max-lg:hidden">
+                      <v-text-field
+                        v-model="salaryRange[0]"
+                        style="width: 100px"
+                        type="number"
+                        variant="outlined"
+                        hide-details
+                        single-line
+                        ></v-text-field>
+                    </div>
+                  </template>
+                  <template #append>
+                    <div class="max-lg:hidden">
+                      <v-text-field
+                        v-model="salaryRange[1]"
+                        style="width: 100px"
+                        type="number"
+                        variant="outlined"
+                        hide-details
+                        single-line
+                      ></v-text-field>
+                    </div>
+                  </template>
+                </v-range-slider>
+                <div class="lg:hidden pt-6">
+                  <div class="flex justify-between gap-4">
                     <v-text-field
                       v-model="salaryRange[0]"
                       style="width: 100px"
@@ -44,18 +70,16 @@
                       hide-details
                       single-line
                       ></v-text-field>
-                  </template>
-                  <template #append>
-                    <v-text-field
-                      v-model="salaryRange[1]"
-                      style="width: 100px"
-                      type="number"
-                      variant="outlined"
-                      hide-details
-                      single-line
-                    ></v-text-field>
-                  </template>
-              </v-range-slider>
+                      <v-text-field
+                        v-model="salaryRange[1]"
+                        style="width: 100px"
+                        type="number"
+                        variant="outlined"
+                        hide-details
+                        single-line
+                      ></v-text-field>
+                  </div>
+                </div>
               </v-col>
           </v-row>
         </template>
