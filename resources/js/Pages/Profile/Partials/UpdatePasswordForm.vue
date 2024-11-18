@@ -45,9 +45,8 @@ const updatePassword = () => {
 
         <form @submit.prevent="updatePassword" class="mt-6 space-y-6">
             <div>
-                <InputLabel for="current_password" value="Current Password" />
-
                 <TextInput
+                    label="Current Password"
                     id="current_password"
                     ref="currentPasswordInput"
                     v-model="form.current_password"
@@ -60,9 +59,8 @@ const updatePassword = () => {
             </div>
 
             <div>
-                <InputLabel for="password" value="New Password" />
-
                 <TextInput
+                    label="Password"
                     id="password"
                     ref="passwordInput"
                     v-model="form.password"
@@ -75,9 +73,8 @@ const updatePassword = () => {
             </div>
 
             <div>
-                <InputLabel for="password_confirmation" value="Confirm Password" />
-
                 <TextInput
+                    label="Confirm Password"
                     id="password_confirmation"
                     v-model="form.password_confirmation"
                     type="password"

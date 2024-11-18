@@ -11,7 +11,8 @@ class UpdateEmployeeRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth()->check();
+        // return auth()->check();
+        return true;
     }
 
     /**
@@ -21,7 +22,7 @@ class UpdateEmployeeRequest extends FormRequest
      */
     public function rules(): array
     {
-        $employeeId = $this->route('employee');
+        $employeeId = $this->route('employee')->id;
 
         return [
             'name' => 'required|string|max:255',

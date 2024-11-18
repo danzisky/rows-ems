@@ -6,8 +6,13 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
+import Alerts from "@/Pages/App/Components/Alerts.vue";
+import AlertProps from "@/Pages/App/Hooks/AlertProps.js";
+import { usePreferredColorScheme, usePreferredDark } from '@vueuse/core';
 
 const showingNavigationDropdown = ref(false);
+
+const theme = usePreferredColorScheme();
 </script>
 
 <template>
@@ -31,6 +36,12 @@ const showingNavigationDropdown = ref(false);
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
+                                </NavLink>
+                                <NavLink :href="route('employees.index')" :active="route().current('employees.*')">
+                                    Employees
+                                </NavLink>
+                                <NavLink :href="route('certifications.index')" :active="route().current('certifications.*')">
+                                    Certifications
                                 </NavLink>
                             </div>
                         </div>
@@ -115,6 +126,12 @@ const showingNavigationDropdown = ref(false);
                         <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
                             Dashboard
                         </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('employees.index')" :active="route().current('employees.*')">
+                            Employees
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('certifications.index')" :active="route().current('certifications.*')">
+                            Certifications
+                        </ResponsiveNavLink>
                     </div>
 
                     <!-- Responsive Settings Options -->
@@ -144,9 +161,12 @@ const showingNavigationDropdown = ref(false);
             </header>
 
             <!-- Page Content -->
-            <main>
-                <slot />
-            </main>
+             <v-theme-provider :theme="theme === 'dark' ? 'myCustomDarkTheme' : theme">
+                <main>
+                    <Alerts :alerts="AlertProps.props.alerts"></Alerts>
+                    <slot />
+                </main>
+            </v-theme-provider>
         </div>
     </div>
 </template>

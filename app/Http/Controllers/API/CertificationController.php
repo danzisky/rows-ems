@@ -26,7 +26,7 @@ class CertificationController extends Controller
             $certifications->orderBy($request->sort_by, $request->get('order', 'asc'));
         }
 
-        $certifications = $certifications->paginate(10);
+        $certifications = $certifications->get();
 
         return response()->json($certifications);
     }

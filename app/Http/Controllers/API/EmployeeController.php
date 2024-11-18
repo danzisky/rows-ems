@@ -8,6 +8,7 @@ use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class EmployeeController extends Controller
 {
@@ -26,7 +27,7 @@ class EmployeeController extends Controller
             $employees->orderBy($request->sort_by, $request->get('order', 'asc'));
         }
 
-        $employees = $employees->paginate(10);
+        $employees = $employees->paginate(6);
 
         return response()->json($employees);
     }
@@ -46,6 +47,8 @@ class EmployeeController extends Controller
 
             DB::commit();
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            dd($e->getMessage());
             DB::rollBack();
             return response()->json(['message' => 'An error occurred while creating the employee'], 500);
         }
@@ -58,6 +61,7 @@ class EmployeeController extends Controller
      */
     public function show(Employee $employee)
     {
+        $employee->load('certifications');
         return response()->json($employee);
     }
 
@@ -77,6 +81,8 @@ class EmployeeController extends Controller
             DB::commit();
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
+            Log::error($e->getMessage());
             DB::rollBack();
             return response()->json(['message' => 'An error occurred while updating the employee'], 500);
         }
@@ -92,6 +98,7 @@ class EmployeeController extends Controller
         try {
             $employee->delete();
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
             return response()->json(['message' => 'An error occurred while deleting the employee'], 500);
         }
 

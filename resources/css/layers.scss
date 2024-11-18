@@ -1,0 +1,4 @@
+@layer vuetify, app;
+
+@import "app.scss" layer(app);
+@import "vuetify/settings.scss" layer(vuetify);

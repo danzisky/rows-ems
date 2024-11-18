@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\CertificationController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Certification;
+use App\Models\Employee;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -27,7 +30,10 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    return Inertia::render('Dashboard', [
+        'employeesCount' => Employee::count(),
+        'certificationsCount' => Certification::count(),
+    ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -36,6 +42,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('employees', EmployeeController::class);
+
+    Route::get('/certifications', [CertificationController::class, 'index'])->name('certifications.index');
 });
 
 require __DIR__.'/auth.php';

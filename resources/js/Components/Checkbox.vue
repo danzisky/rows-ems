@@ -8,6 +8,10 @@ const props = defineProps({
         type: [Array, Boolean],
         required: true,
     },
+    label: {
+        type: String,
+        default: '',
+    },
     value: {
         default: null,
     },
@@ -25,10 +29,11 @@ const proxyChecked = computed({
 </script>
 
 <template>
-    <input
-        type="checkbox"
+    <v-checkbox
         :value="value"
         v-model="proxyChecked"
+        hide-details="auto"
+        :label="label"
         class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800"
     />
 </template>

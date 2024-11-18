@@ -14,7 +14,7 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Employees/Index', [
+        return Inertia::render('App/Employees/Index', [
             // 'employees' => Employee::all()
         ]);
     }
@@ -24,7 +24,7 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Employees/Create');
+        return Inertia::render('App/Employees/Create');
     }
 
     /**
@@ -32,7 +32,8 @@ class EmployeeController extends Controller
      */
     public function show(Employee $employee)
     {
-        return Inertia::render('Employees/Show', [
+        $employee->load('certifications');
+        return Inertia::render('App/Employees/Show', [
             'employee' => $employee
         ]);
     }
@@ -42,7 +43,7 @@ class EmployeeController extends Controller
      */
     public function edit(Employee $employee)
     {
-        return Inertia::render('Employees/Edit', [
+        return Inertia::render('App/Employees/Edit', [
             'employee' => $employee
         ]);
     }

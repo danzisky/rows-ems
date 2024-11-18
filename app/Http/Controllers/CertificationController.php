@@ -14,9 +14,7 @@ class CertificationController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Certifications/Index', [
-            'certifications' => Certification::all()
-        ]);
+        return Inertia::render('App/Certifications/Index');
     }
 
     /**

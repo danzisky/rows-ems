@@ -9,6 +9,14 @@ class Employee extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'email',
+        'phone_number',
+        'job_title',
+        'salary'
+    ];
+
     public function certifications()
     {
         return $this->belongsToMany(Certification::class);

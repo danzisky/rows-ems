@@ -34,9 +34,8 @@ const form = useForm({
 
         <form @submit.prevent="form.patch(route('profile.update'))" class="mt-6 space-y-6">
             <div>
-                <InputLabel for="name" value="Name" />
-
                 <TextInput
+                    label="Name"
                     id="name"
                     type="text"
                     class="mt-1 block w-full"
@@ -50,9 +49,8 @@ const form = useForm({
             </div>
 
             <div>
-                <InputLabel for="email" value="Email" />
-
                 <TextInput
+                    label="Email"
                     id="email"
                     type="email"
                     class="mt-1 block w-full"
