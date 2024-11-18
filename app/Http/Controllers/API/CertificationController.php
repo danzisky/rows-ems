@@ -8,6 +8,7 @@ use App\Http\Requests\StoreCertificationRequest;
 use App\Http\Requests\UpdateCertificationRequest;
 use App\Models\Employee;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class CertificationController extends Controller
 {
@@ -16,19 +17,29 @@ class CertificationController extends Controller
      */
     public function index(Request $request)
     {
-        $certifications = Certification::query();
+        $cacheKey = 'certifications_' . md5(json_encode([
+            'search' => $request->get('search'),
+            'sort_by' => $request->get('sort_by'),
+            'order' => $request->get('order', 'asc'),
+        ]));
 
-        if ($request->filled('search')) {
-            $certifications->where('name', 'like', '%' . $request->search . '%');
-        }
+        $cacheDuration = now()->addMinutes(10);
 
-        if ($request->filled('sort_by')) {
-            $certifications->orderBy($request->sort_by, $request->get('order', 'asc'));
-        }
+        $certifications = Cache::remember($cacheKey, $cacheDuration, function () use ($request) {
+            $query = Certification::query();
 
-        $certifications = $certifications->get();
+            if ($request->filled('search')) {
+                $query->where('name', 'like', '%' . $request->search . '%');
+            }
 
-        return response()->json($certifications);
+            if ($request->filled('sort_by')) {
+                $query->orderBy($request->sort_by, $request->get('order', 'asc'));
+            }
+
+            return $query->get();
+        });
+    
+        return response()->json($certifications); // Return the cached or freshly queried data as JSON
     }
 
     /**

@@ -7,34 +7,58 @@ use App\Models\Employee;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class EmployeeController extends Controller
 {
+    private $cacheKey = 'last_modification_employees';
+
+    private function updateCacheTracker()
+    {
+        Cache::put($this->cacheKey, now(), now()->addMinutes(120));
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $employees = Employee::query();
+        $cacheKey = 'employees_' . md5(json_encode([
+            'search' => $request->get('search'),
+            'min_salary' => $request->get('min_salary'),
+            'max_salary' => $request->get('max_salary'),
+            'sort_by' => $request->get('sort_by'),
+            'order' => $request->get('order', 'asc'),
+            'page' => $request->get('page', 1)
+        ]));
 
-        if ($request->filled('search')) {
-            $employees->where('name', 'like', '%' . $request->search . '%');
+        $cacheDuration = now()->addMinutes(120);
+
+        if (Cache::get($this->cacheKey) > now()->subMinutes(120)) { // if a change has been made in the last 120 minutes
+            $this->updateCacheTracker();
+            cache()->forget($cacheKey);
         }
+        $employees = Cache::remember($cacheKey, $cacheDuration, function () use ($request) {
+            $query = Employee::query();
 
-        // filter by salary range
-        if ($request->filled('min_salary') && $request->filled('max_salary')) {
-            $employees->whereBetween('salary', [$request->min_salary, $request->max_salary]);
-        }
+            if ($request->filled('search')) {
+                $query->where('name', 'like', '%' . $request->search . '%');
+            }
 
-        if ($request->filled('sort_by')) {
-            $employees->orderBy($request->sort_by, $request->get('order', 'asc'));
-        }
+            if ($request->filled('min_salary') && $request->filled('max_salary')) {
+                $query->whereBetween('salary', [$request->min_salary, $request->max_salary]);
+            }
 
-        $employees = $employees->paginate(6);
+            if ($request->filled('sort_by')) {
+                $query->orderBy($request->sort_by, $request->get('order', 'asc'));
+            }
 
-        return response()->json($employees);
+            return $query->paginate(6);
+        });
+
+        return response()->json($employees); // Return the employees in JSON format
     }
 
     /**
@@ -49,6 +73,8 @@ class EmployeeController extends Controller
             if ($request->filled('certifications')) {
                 $employee->certifications()->attach($request->certifications);
             }
+
+            $this->updateCacheTracker();
 
             DB::commit();
         } catch (\Exception $e) {
@@ -82,6 +108,8 @@ class EmployeeController extends Controller
             if ($request->filled('certifications')) {
                 $employee->certifications()->sync($request->certifications);
             }
+
+            $this->updateCacheTracker();
 
             DB::commit();
 
