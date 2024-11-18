@@ -88,13 +88,8 @@ const form = ref({
 const certifications = ref([]);
 
 const createEmployee = () => {
-  axios.post('/api/employees', form.value, {
-    headers: {
-      'X-CSRF-TOKEN': window.Laravel.csrfToken
-    }
-  })
+  axios.post('/api/employees', form.value)
     .then(response => {
-      console.log(response.data)
       router.get(route('employees.index'))
     })
     .catch(error => {

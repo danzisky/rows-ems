@@ -3,8 +3,10 @@ import { onMounted, ref } from 'vue';
 
 const model = defineModel({
     type: String,
-    label: String,
-    required: true,
+});
+
+const props = defineProps({
+    label: { type: String, required: true },
 });
 
 const input = ref(null);

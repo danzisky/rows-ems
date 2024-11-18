@@ -41,7 +41,7 @@
 
           <template #item.actions="{ item }">
             <div class="flex">
-              <v-btn color="primary" to="edit" :params="{ id: item.id }" icon="mdi-pencil-outline" variant="text"></v-btn>
+              <v-btn color="primary" @click="router.get(route('employees.show', { employee: item.id }))" :params="{ id: item.id }" icon="mdi-pencil-outline" variant="text"></v-btn>
               <v-btn color="error" @click="deleteEmployee(item)" icon="mdi-delete-outline" variant="text"></v-btn>
             </div>
           </template>
@@ -98,7 +98,7 @@ onMounted(() => {
 
 const fetchEmployees = useDebounceFn((page = 1) => {
   loading.value = true
-
+  
   axios.get('/api/employees', { params: { page, search: search.value } })
     .then(response => {
       employees.value = response.data.data

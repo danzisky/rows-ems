@@ -81,7 +81,6 @@
 <script setup>
 import EmployeesLayout from './Layout.vue';
 import { onMounted, ref } from 'vue';
-import { router } from '@inertiajs/vue3';
 
 const props = defineProps({
   employee: {
