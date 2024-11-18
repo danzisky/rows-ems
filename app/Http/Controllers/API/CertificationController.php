@@ -36,9 +36,9 @@ class CertificationController extends Controller
                 $query->orderBy($request->sort_by, $request->get('order', 'asc'));
             }
 
-            return $query->get();
+            return $query->limit(50)->get();
         });
-    
+
         return response()->json($certifications); // Return the cached or freshly queried data as JSON
     }
 

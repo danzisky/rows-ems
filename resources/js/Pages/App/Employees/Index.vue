@@ -18,7 +18,7 @@
           <v-row>
               <v-col cols="12" md="6">
                 <v-text-field
-                  v-model="search"
+                  v-model="filter.search"
                   label="Search"
                   prepend-inner-icon="mdi-magnify"
                   variant="outlined"
@@ -82,14 +82,33 @@
                 </div>
               </v-col>
           </v-row>
+          <v-divider class="my-4"></v-divider>
+          <v-row>
+            <v-col cols="12" md="6">
+              <v-select
+                v-model="filter.sort_by"
+                :items="headers.filter(h => h.value !== 'actions').map(h => h.value)"
+                label="Sort By"
+                hide-details
+              ></v-select>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-select
+                v-model="filter.order"
+                :items="['asc', 'desc']"
+                label="Order"
+                hide-details
+              ></v-select>
+            </v-col>
+          </v-row>
         </template>
 
         <v-data-table
           :items="employees"
           :headers="headers"
-          :search="search"
+          :search="filter.search"
           :loading="loading"
-          @search="search = $event"
+          @search="filter.search = $event"
         >
           <template #item.name="{ item }">
             <Link method="get" as="button" type="button" :href="route('employees.show', { employee: item.id })" class="underline underline-offset-2 hover:text-blue-500" > {{ item.name }} </Link>
@@ -127,7 +146,7 @@
 import { useDebounceFn } from '@vueuse/core';
 import EmployeesLayout from './Layout.vue';
 import Pagination from '@App/Components/Pagination.vue';
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, reactive } from 'vue';
 import { router, Link } from '@inertiajs/vue3';
 import CreateAlert from '../Hooks/CreateAlert';
 
@@ -144,8 +163,12 @@ const headers = [
   { title: 'Actions', value: 'actions' }
 ]
 
-const search = ref('')
 const salaryRange = ref([0, 100000])
+const filter = reactive({
+  search: '',
+  sort_by: 'created_at',
+  order: 'desc',
+})
 const loading = ref(false)
 
 const pagination = ref({
@@ -163,7 +186,9 @@ const fetchEmployees = useDebounceFn((page = 1) => {
   axios.get('/api/employees', {
       params: {
         page,
-        search: search.value,
+        search: filter.search,
+        sort_by: filter.sort_by,
+        order: filter.order,
         min_salary: salaryRange.value[0],
         max_salary: salaryRange.value[1],
       }
@@ -202,7 +227,7 @@ const formatDate = (date) => {
   return new Date(date).toLocaleString()
 }
 
-watch([search, salaryRange], () => {
+watch([filter, salaryRange], () => {
   fetchEmployees()
 })
 </script>
