@@ -79,7 +79,6 @@ class EmployeeController extends Controller
             DB::commit();
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-            dd($e->getMessage());
             DB::rollBack();
             return response()->json(['message' => 'An error occurred while creating the employee'], 500);
         }
@@ -114,7 +113,6 @@ class EmployeeController extends Controller
             DB::commit();
 
         } catch (\Exception $e) {
-            dd($e->getMessage());
             Log::error($e->getMessage());
             DB::rollBack();
             return response()->json(['message' => 'An error occurred while updating the employee'], 500);
